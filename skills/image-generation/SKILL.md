@@ -32,12 +32,12 @@ If no preference is specified, use defaults (1:1, 2K, gemini-3-pro-image-preview
 Run the generation script. The prompt MUST be passed as a single quoted argument:
 
 ```bash
-bash ~/.claude/plugins/gemini-image-gen/scripts/generate-image.sh '<enhanced prompt>' --aspect-ratio <ratio> --size <size>
+bash ~/.claude/plugins/cache/gemini-image-gen/gemini-image-gen/*/scripts/generate-image.sh '<enhanced prompt>' --aspect-ratio <ratio> --size <size>
 ```
 
 Example:
 ```bash
-bash ~/.claude/plugins/gemini-image-gen/scripts/generate-image.sh 'a majestic lion resting on a savanna at golden hour, photorealistic, dramatic lighting' --aspect-ratio 16:9 --size 4K
+bash ~/.claude/plugins/cache/gemini-image-gen/gemini-image-gen/*/scripts/generate-image.sh 'a majestic lion resting on a savanna at golden hour, photorealistic, dramatic lighting' --aspect-ratio 16:9 --size 4K
 ```
 
 ## Step 4: Display the result
