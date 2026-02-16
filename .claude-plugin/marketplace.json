@@ -1,0 +1,16 @@
+{
+  "name": "gemini-image-gen",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for AI image generation via Google Gemini API",
+  "owner": {
+    "name": "Portablelle"
+  },
+  "plugins": [
+    {
+      "name": "gemini-image-gen",
+      "source": "./",
+      "description": "Generate images using Google Gemini API from Claude Code",
+      "category": "productivity"
+    }
+  ]
+}

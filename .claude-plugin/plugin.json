@@ -1,0 +1,11 @@
+{
+  "name": "gemini-image-gen",
+  "version": "1.0.0",
+  "description": "Generate images using Google Gemini API (supports gemini-3-pro-image-preview and gemini-2.5-flash-image)",
+  "author": {
+    "name": "Portablelle"
+  },
+  "repository": "https://github.com/Portablelle/claude-gemini-image-gen",
+  "license": "MIT",
+  "keywords": ["image", "generation", "gemini", "ai", "art", "google"]
+}
