@@ -100,7 +100,6 @@ mkdir -p "$OUTPUT_DIR"
 
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 SANITIZED=$(echo "$PROMPT" | tr -cs '[:alnum:]-' '_' | cut -c1-50 | sed 's/_$//')
-OUTPUT_FILE="$OUTPUT_DIR/${TIMESTAMP}-${SANITIZED}.png"
 
 echo "Generating image..." >&2
 echo "  Model: $MODEL" >&2
@@ -152,11 +151,17 @@ if [[ "$HTTP_CODE" != "200" ]]; then
   exit 1
 fi
 
-# --- Extract image data ---
+# --- Extract image data and MIME type ---
 IMAGE_DATA=$(echo "$RESPONSE_BODY" | jq -r '
   .candidates[0].content.parts[]
   | select(.inlineData)
   | .inlineData.data
+' 2>/dev/null | head -1)
+
+MIME_TYPE=$(echo "$RESPONSE_BODY" | jq -r '
+  .candidates[0].content.parts[]
+  | select(.inlineData)
+  | .inlineData.mimeType
 ' 2>/dev/null | head -1)
 
 if [[ -z "$IMAGE_DATA" ]] || [[ "$IMAGE_DATA" == "null" ]]; then
@@ -165,6 +170,12 @@ if [[ -z "$IMAGE_DATA" ]] || [[ "$IMAGE_DATA" == "null" ]]; then
     .candidates[0].content.parts[]
     | select(.inline_data)
     | .inline_data.data
+  ' 2>/dev/null | head -1)
+
+  MIME_TYPE=$(echo "$RESPONSE_BODY" | jq -r '
+    .candidates[0].content.parts[]
+    | select(.inline_data)
+    | .inline_data.mimeType
   ' 2>/dev/null | head -1)
 fi
 
@@ -176,6 +187,16 @@ if [[ -z "$IMAGE_DATA" ]] || [[ "$IMAGE_DATA" == "null" ]]; then
   fi
   exit 1
 fi
+
+# --- Determine correct file extension from MIME type ---
+case "${MIME_TYPE:-image/png}" in
+  image/jpeg|image/jpg) EXT="jpg" ;;
+  image/webp)           EXT="webp" ;;
+  image/gif)            EXT="gif" ;;
+  *)                    EXT="png" ;;
+esac
+
+OUTPUT_FILE="$OUTPUT_DIR/${TIMESTAMP}-${SANITIZED}.${EXT}"
 
 # --- Save image ---
 echo "$IMAGE_DATA" | base64 -d > "$OUTPUT_FILE"
